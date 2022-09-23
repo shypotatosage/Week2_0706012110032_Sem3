@@ -101,6 +101,8 @@ class AddActivity : AppCompatActivity() {
 
                     Toast.makeText(applicationContext, "Berhasil menambahkan data hewan", Toast.LENGTH_SHORT).show()
                 } else {
+                    animal.imageUri = GlobalVar.listDataAnimal[position].imageUri
+
                     GlobalVar.listDataAnimal.set(position, animal)
 
                     if (urii.isNotEmpty()) {

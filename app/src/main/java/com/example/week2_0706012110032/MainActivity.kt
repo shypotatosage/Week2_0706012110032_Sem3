@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity(), CardListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        
+
         setUpRecyclerView()
         listener()
     }
@@ -33,7 +33,29 @@ class MainActivity : AppCompatActivity(), CardListener {
     override fun onResume() {
         super.onResume()
 
-        setUp()
+        if (adapter.listAnimal.size > 0) {
+            if (adapter.listAnimal[0] is Sapi) {
+                setUp("Sapi")
+                filter("Sapi")
+                adapter.listAnimal = GlobalVar.listDataTemp
+            } else if (adapter.listAnimal[0] is Ayam) {
+                setUp("Ayam")
+                filter("Ayam")
+                adapter.listAnimal = GlobalVar.listDataTemp
+            } else if (adapter.listAnimal[0] is Kambing) {
+                setUp("Kambing")
+                filter("Kambing")
+                adapter.listAnimal = GlobalVar.listDataTemp
+            } else {
+                setUp("hewan")
+                adapter.listAnimal = GlobalVar.listDataAnimal
+            }
+        } else {
+            setUp("hewan")
+            adapter.listAnimal = GlobalVar.listDataAnimal
+        }
+
+        setUpRecyclerView()
         adapter.notifyDataSetChanged()
     }
 
@@ -52,12 +74,21 @@ class MainActivity : AppCompatActivity(), CardListener {
 
             if (menuItem.itemId == R.id.option_4) {
                 adapter.listAnimal = GlobalVar.listDataAnimal
-                setUpRecyclerView()
-                adapter.notifyDataSetChanged()
             } else {
                 adapter.listAnimal = GlobalVar.listDataTemp
-                setUpRecyclerView()
-                adapter.notifyDataSetChanged()
+            }
+
+            setUpRecyclerView()
+            adapter.notifyDataSetChanged()
+
+            if (menuItem.itemId == R.id.option_1) {
+                setUp("Sapi")
+            } else if (menuItem.itemId == R.id.option_2) {
+                setUp("Ayam")
+            } else if (menuItem.itemId == R.id.option_3) {
+                setUp("Kambing")
+            } else {
+                setUp("hewan")
             }
 
             true
@@ -72,7 +103,7 @@ class MainActivity : AppCompatActivity(), CardListener {
     private fun listener() {
         addUpdateAnimal.setOnClickListener {
             val myIntent = Intent(this, AddActivity::class.java)
-            
+
             startActivity(myIntent)
         }
 
@@ -109,7 +140,7 @@ class MainActivity : AppCompatActivity(), CardListener {
                 GlobalVar.listDataAnimal.removeAt(position)
                 Toast.makeText(applicationContext, "Berhasil menghapus data hewan", Toast.LENGTH_SHORT).show()
 
-                setUp()
+                setUp("hewan")
                 adapter.notifyDataSetChanged()
 
                 dialog.cancel()
@@ -117,13 +148,14 @@ class MainActivity : AppCompatActivity(), CardListener {
             .show()
     }
 
-    private fun setUp() {
-        if (GlobalVar.listDataAnimal.size != 0) {
+    private fun setUp(str: String) {
+        if (adapter.listAnimal.size != 0) {
             noAnimals_ImageView.visibility = View.INVISIBLE
             noAnimals_TextView.visibility = View.INVISIBLE
         } else {
             noAnimals_ImageView.visibility = View.VISIBLE
             noAnimals_TextView.visibility = View.VISIBLE
+            noAnimals_TextView.text = "Anda belum memiliki " + str
         }
     }
 
