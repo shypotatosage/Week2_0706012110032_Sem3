@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Week1_0706012110032</string>
+    <string name="cancel">Batal</string>
+    <string name="delete">Hapus</string>
+    <string name="title">Menghapus Hewan</string>
+    <string name="supporting_text">Apakah Anda yakin ingin menghapus hewan ini?</string>
+    <string name="option_1">Sapi</string>
+    <string name="option_2">Ayam</string>
+    <string name="option_3">Kambing</string>
+    <string name="option_4">Semua</string>
+</resources>
