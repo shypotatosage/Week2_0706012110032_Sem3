@@ -54,7 +54,7 @@
                     android:padding="7dp"
                     app:layout_constraintEnd_toEndOf="@+id/deleteButton"
                     app:layout_constraintTop_toTopOf="@+id/animalName_TextView"
-                    app:srcCompat="@drawable/ic_baseline_interests_24"
+                    app:srcCompat="@drawable/ic_baseline_touch_app_24"
                     app:tint="@color/white" />
 
                 <TextView
