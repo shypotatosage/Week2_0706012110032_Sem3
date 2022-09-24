@@ -3,6 +3,7 @@ package com.example.week2_0706012110032
 import Adapter.RVAdapter
 import Database.GlobalVar
 import Interface.CardListener
+import Model.Animal
 import Model.Ayam
 import Model.Kambing
 import Model.Sapi
@@ -21,11 +22,14 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity(), CardListener {
 
     private val adapter = RVAdapter(GlobalVar.listDataAnimal, this)
+    private lateinit var filter: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        filter = "hewan"
+        adapter.listAnimal = GlobalVar.listDataAnimal
         setUpRecyclerView()
         listener()
     }
@@ -34,25 +38,29 @@ class MainActivity : AppCompatActivity(), CardListener {
         super.onResume()
 
         if (adapter.listAnimal.size > 0) {
-            if (adapter.listAnimal[0] is Sapi) {
-                setUp("Sapi")
-                filter("Sapi")
-                adapter.listAnimal = GlobalVar.listDataTemp
-            } else if (adapter.listAnimal[0] is Ayam) {
-                setUp("Ayam")
-                filter("Ayam")
-                adapter.listAnimal = GlobalVar.listDataTemp
-            } else if (adapter.listAnimal[0] is Kambing) {
-                setUp("Kambing")
-                filter("Kambing")
-                adapter.listAnimal = GlobalVar.listDataTemp
+            if (adapter.listAnimal == GlobalVar.listDataTemp) {
+                if (adapter.listAnimal[0] is Sapi) {
+                    filter("Sapi")
+                    adapter.listAnimal = GlobalVar.listDataTemp
+                } else if (adapter.listAnimal[0] is Ayam) {
+                    filter("Ayam")
+                    adapter.listAnimal = GlobalVar.listDataTemp
+                } else {
+                    filter("Kambing")
+                    adapter.listAnimal = GlobalVar.listDataTemp
+                }
             } else {
                 setUp("hewan")
                 adapter.listAnimal = GlobalVar.listDataAnimal
             }
         } else {
-            setUp("hewan")
-            adapter.listAnimal = GlobalVar.listDataAnimal
+            setUp(filter)
+
+            if (filter == "hewan") {
+                adapter.listAnimal = GlobalVar.listDataAnimal
+            } else {
+                adapter.listAnimal = GlobalVar.listDataTemp
+            }
         }
 
         setUpRecyclerView()
@@ -119,14 +127,23 @@ class MainActivity : AppCompatActivity(), CardListener {
     }
 
     override fun onEditClick(position: Int) {
-        val myIntent = Intent(this, AddActivity::class.java).apply {
-            putExtra("Position", position)
-        }
+        if (adapter.listAnimal == GlobalVar.listDataTemp) {
+            val myIntent = Intent(this, AddActivity::class.java).apply {
+                putExtra("Position1", GlobalVar.listDataAnimal.indexOf(adapter.listAnimal.get(position)))
+                putExtra("Position2", position)
+            }
 
-        startActivity(myIntent)
+            startActivity(myIntent)
+        } else {
+            val myIntent = Intent(this, AddActivity::class.java).apply {
+                putExtra("Position1", position)
+            }
+
+            startActivity(myIntent)
+        }
     }
 
-    override fun onDeleteClick(position: Int) {
+    override fun onDeleteClick(position: Int, data: Animal) {
         MaterialAlertDialogBuilder(
             this,
             com.google.android.material.R.style.MaterialAlertDialog_Material3
@@ -137,7 +154,12 @@ class MainActivity : AppCompatActivity(), CardListener {
                 dialog.cancel()
             }
             .setPositiveButton(resources.getString(R.string.delete)) { dialog, which ->
+                if (adapter.listAnimal == GlobalVar.listDataTemp) {
+                    GlobalVar.listDataTemp.remove(data)
+                }
+
                 GlobalVar.listDataAnimal.removeAt(position)
+
                 Toast.makeText(applicationContext, "Berhasil menghapus data hewan", Toast.LENGTH_SHORT).show()
 
                 setUp("hewan")

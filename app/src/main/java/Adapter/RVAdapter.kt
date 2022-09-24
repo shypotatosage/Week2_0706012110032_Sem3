@@ -4,6 +4,7 @@ import Database.GlobalVar
 import Interface.CardListener
 import Model.Animal
 import Model.Ayam
+import Model.Kambing
 import Model.Sapi
 import android.net.Uri
 import android.view.LayoutInflater
@@ -40,7 +41,7 @@ class RVAdapter(var listAnimal: ArrayList<Animal>, val cardListener: CardListene
             }
 
             itemView.deleteButton.setOnClickListener {
-                cardListener1.onDeleteClick(adapterPosition)
+                cardListener1.onDeleteClick(adapterPosition, data)
             }
 
             itemView.interactBtn.setOnClickListener {
@@ -48,7 +49,11 @@ class RVAdapter(var listAnimal: ArrayList<Animal>, val cardListener: CardListene
             }
 
             itemView.feedBtn.setOnClickListener {
-                Toast.makeText(itemView.context, data.feed(), Toast.LENGTH_SHORT).show()
+                if (data is Sapi || data is Kambing) {
+                    Toast.makeText(itemView.context, data.feed(1), Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(itemView.context, data.feed("1"), Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

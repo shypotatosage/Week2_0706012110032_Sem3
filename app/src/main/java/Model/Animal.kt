@@ -20,8 +20,12 @@ open class Animal (
         return "a";
     }
 
-    open fun feed(): String {
-        return "a";
+    open fun feed(ayam: String): String {
+        return "Kamu memberi makan hewanmu dengan biji jagung";
+    }
+
+    open fun feed(sapiKambing: Int): String {
+        return "Kamu memberi makan hewanmu dengan rumput";
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

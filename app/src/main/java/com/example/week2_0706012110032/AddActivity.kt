@@ -19,7 +19,8 @@ import kotlinx.android.synthetic.main.card_animal.*
 
 class AddActivity : AppCompatActivity() {
 
-    private var position = -1
+    private var position1 = -1
+    private var position2 = -1
     private lateinit var urii: String
 
     private val GetResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
@@ -90,7 +91,7 @@ class AddActivity : AppCompatActivity() {
                     animal = Kambing(animalNameTIL.editText?.text.toString().trim(), animalAgeTIL.editText?.text.toString().trim().toInt(), "")
                 }
 
-                if (position == -1) {
+                if (position1 == -1) {
                     GlobalVar.listDataAnimal.add(animal)
 
                     var index = GlobalVar.listDataAnimal.size - 1
@@ -101,12 +102,19 @@ class AddActivity : AppCompatActivity() {
 
                     Toast.makeText(applicationContext, "Berhasil menambahkan data hewan", Toast.LENGTH_SHORT).show()
                 } else {
-                    animal.imageUri = GlobalVar.listDataAnimal[position].imageUri
+                    animal.imageUri = GlobalVar.listDataAnimal[position1].imageUri
 
-                    GlobalVar.listDataAnimal.set(position, animal)
+                    GlobalVar.listDataAnimal.set(position1, animal)
 
                     if (urii.isNotEmpty()) {
-                        GlobalVar.listDataAnimal[position].imageUri = urii
+                        GlobalVar.listDataAnimal[position1].imageUri = urii
+                    }
+
+                    if (position2 != -1) {
+                        GlobalVar.listDataTemp.set(position2, animal)
+                        if (urii.isNotEmpty()) {
+                            GlobalVar.listDataTemp[position2].imageUri = urii
+                        }
                     }
 
                     Toast.makeText(applicationContext, "Berhasil memperbarui data hewan", Toast.LENGTH_SHORT).show()
@@ -118,28 +126,29 @@ class AddActivity : AppCompatActivity() {
     }
 
     private fun GetIntent() {
-        position = intent.getIntExtra("Position", -1)
+        position1 = intent.getIntExtra("Position1", -1)
+        position2 = intent.getIntExtra("Position2", -1)
     }
 
     private fun display() {
-        if (position != -1) {
-            animalNameTIL.editText!!.setText(GlobalVar.listDataAnimal.get(position).name)
+        if (position1 != -1) {
+            animalNameTIL.editText!!.setText(GlobalVar.listDataAnimal.get(position1).name)
 
-            if (GlobalVar.listDataAnimal.get(position) is Sapi) {
+            if (GlobalVar.listDataAnimal.get(position1) is Sapi) {
                 animalTypeRG.check(R.id.radioButton)
-            } else if (GlobalVar.listDataAnimal.get(position) is Ayam) {
+            } else if (GlobalVar.listDataAnimal.get(position1) is Ayam) {
                 animalTypeRG.check(R.id.radioButton2)
             } else {
                 animalTypeRG.check(R.id.radioButton3)
             }
 
-            animalAgeTIL.editText!!.setText(GlobalVar.listDataAnimal.get(position).age.toString())
+            animalAgeTIL.editText!!.setText(GlobalVar.listDataAnimal.get(position1).age.toString())
 
-             if (GlobalVar.listDataAnimal.get(position).imageUri != "") {
+             if (GlobalVar.listDataAnimal.get(position1).imageUri != "") {
                 addUpdateAnimal_ImageView.setImageURI(
                     Uri.parse(
                         GlobalVar.listDataAnimal.get(
-                            position
+                            position1
                         ).imageUri
                     )
                 )
