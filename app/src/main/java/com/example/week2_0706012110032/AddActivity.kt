@@ -123,7 +123,7 @@ class AddActivity : AppCompatActivity() {
                     }
 
                     Toast.makeText(applicationContext, "Berhasil memperbarui data hewan", Toast.LENGTH_SHORT).show()
-                }1
+                }
 
                 finish()
             }
