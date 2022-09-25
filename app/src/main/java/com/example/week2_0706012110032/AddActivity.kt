@@ -111,14 +111,19 @@ class AddActivity : AppCompatActivity() {
                     }
 
                     if (position2 != -1) {
-                        GlobalVar.listDataTemp.set(position2, animal)
+                        if ((GlobalVar.listDataTemp[position2] is Sapi && animal is Sapi) || (GlobalVar.listDataTemp[position2] is Ayam && animal is Ayam) || (GlobalVar.listDataTemp[position2] is Kambing && animal is Kambing)) {
+                            GlobalVar.listDataTemp.set(position2, animal)
+                        } else {
+                            GlobalVar.listDataTemp.removeAt(position2)
+                        }
+
                         if (urii.isNotEmpty()) {
                             GlobalVar.listDataTemp[position2].imageUri = urii
                         }
                     }
 
                     Toast.makeText(applicationContext, "Berhasil memperbarui data hewan", Toast.LENGTH_SHORT).show()
-                }
+                }1
 
                 finish()
             }
